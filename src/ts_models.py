@@ -140,11 +140,24 @@ def exponential_smoothing(ts_train,ts_test, **kwargs):
     trend = kwargs.get('trend',None)
     remove_bias = kwargs.get('remove_bias',True)
     return_model = kwargs.get('return_model',False)
-    
+    damping_trend = kwargs.get('damping_trend',None)
+
+    # Get Param Values
+    model_train = kwargs.get('model_train',None)
+
     # Fit Model
-    model = ExponentialSmoothing(ts_train, trend = trend, damped = damped,
-                                 seasonal = seasonal, seasonal_periods = seasonal_periods)\
-            .fit(smoothing_level=smoothing_level, use_boxcox=use_boxcox, remove_bias=remove_bias)
+    if model_train is None:
+        model = ExponentialSmoothing(ts_train, trend = trend, damped = damped,
+                                    seasonal = seasonal, seasonal_periods = seasonal_periods)\
+                .fit(smoothing_level=smoothing_level, use_boxcox=use_boxcox, remove_bias=remove_bias,damping_trend=damping_trend)
+    else:
+        model_params = model_train.params
+        model = ExponentialSmoothing(ts_train, trend = trend, damped = damped,
+                                    seasonal = seasonal, seasonal_periods = seasonal_periods)\
+            .fit(smoothing_level=model_params['smoothing_level'], use_boxcox=model_params['use_boxcox'], 
+                 remove_bias=model_params['remove_bias'], initial_trend = model_params['initial_trend'],
+                 smoothing_seasonal= model_params['smoothing_seasonal'], damping_trend = model_params['damping_trend'],
+                 initial_level = model_params['initial_level'])
     
     fcast1 = model.predict(start=ts_test.index[0], end=ts_test.index[-1])
     

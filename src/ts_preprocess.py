@@ -6,16 +6,18 @@ import pandas as pd
 import numpy as np
 
 # Data Visualization
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+init_notebook_mode(connected=True)
+
 from ipywidgets import widgets, interact, interact_manual
 from IPython.display import display, clear_output
 from itertools import product
 import functools
 
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-init_notebook_mode(connected=True)
+
 
 # Timeseries Manipulation
 import statsmodels.api as sm

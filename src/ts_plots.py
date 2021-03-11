@@ -7,16 +7,18 @@ import numpy as np
 from scipy.ndimage.interpolation import shift
 
 # Data Visualization
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
+init_notebook_mode(connected=True)
+
 from ipywidgets import widgets, interact, interact_manual
 from IPython.display import display, clear_output
 from itertools import product
 import functools
 
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-init_notebook_mode(connected=True)
+
 
 # Timeseries Manipulation
 import statsmodels.api as sm
@@ -364,14 +366,14 @@ def plot_scatter_matrix(df, trim_label = None, **kwargs):
         """
         dimensions = []
         for i in cols:
-            d = dict(label = i[:val], values = df[i])
+            d = dict(label = i[4:val], values = df[i])
             dimensions.append(d)
 
         fig = go.Figure(data=go.Splom(dimensions=dimensions,
                                       marker=dict(showscale=False,
                                                   line_color='white', line_width=0.5)))
 
-        fig.update_layout(height=height, width=width)
+        fig.update_layout(height=height, width=width,font=dict(size=8))
    
         if path_html is not None:
             fig.write_html(path_html)
@@ -379,7 +381,7 @@ def plot_scatter_matrix(df, trim_label = None, **kwargs):
         return fig.show()
     
     # Create Widgets
-    col_widget = widgets.SelectMultiple(options=ops,value=(),rows=5,description='Select Columns:',disabled=False)
+    col_widget = widgets.SelectMultiple(options=ops,value=(),rows=7,description='Select Columns:',disabled=False)
 
     title = widgets.Text(value = " Chart Title",
                          placeholder = "Insert Title Here",
